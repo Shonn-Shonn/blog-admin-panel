@@ -6,9 +6,14 @@ use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,7 +28,9 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('title')->required(),
+                FileUpload::make('image')->disk('public'),
+                RichEditor::make('description')->required(),
             ]);
     }
 
@@ -31,7 +38,10 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id'),
+                TextColumn::make('title'),
+                ImageColumn::make('image')->square(),
+                TextColumn::make('description')->limit(20)->markdown(),
             ])
             ->filters([
                 //
@@ -48,14 +58,14 @@ class PostResource extends Resource
                 Tables\Actions\CreateAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -63,5 +73,5 @@ class PostResource extends Resource
             'create' => Pages\CreatePost::route('/create'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
-    }    
+    }
 }
