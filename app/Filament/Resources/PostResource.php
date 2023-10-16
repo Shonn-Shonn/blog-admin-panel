@@ -39,9 +39,9 @@ class PostResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id'),
-                TextColumn::make('title'),
-                ImageColumn::make('image')->square(),
-                TextColumn::make('description')->limit(20)->markdown(),
+                TextColumn::make('title')->label('Post Title')->searchable(),
+                ImageColumn::make('image')->square()->label('Post Image'),
+                TextColumn::make('description')->limit(20)->markdown()->label('Post Description'),
             ])
             ->filters([
                 //
